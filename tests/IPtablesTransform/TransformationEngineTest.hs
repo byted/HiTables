@@ -226,10 +226,9 @@ test_getTestCutsProt = res @=? getTestCuts n1 spmf
 
 test_convertSimple = res @=? (fst $ convert input 3 2 MaxDistinctRules Linear)
     where   res = 
-                "-A INPUT -p 0 --sport 0:65535 --dport 0:65535 -j ACCEPT\n" ++
-                "-A INPUT -m iprange --src-range 192.168.1.2-192.168.1.2 -p 0 --sport 0:65535 --dport 0:65535 -j ACCEPT\n" ++
+                "-A INPUT -m iprange --src-range 192.168.1.2-192.168.1.2 -p 0 -j ACCEPT\n" ++
                 "-A INPUT ! -p 17 --sport 0:65535 --dport 21:21 -j DROP\n" ++
                 "-A OUTPUT -m iprange ! --dst-range 200.0.0.0-200.255.255.255 -p 6 --sport 0:65535 --dport 0:65535 -j DROP\n" ++
-                "-A OUTPUT -p 0 --sport 0:65535 ! --dport 21:21 -j LOG\n"
-            Right input = parseIPtables $   "-A INPUT -j ACCEPT\n -A INPUT -s 192.168.1.2/32 -d 0.0.0.0/0 -j ACCEPT\n -A INPUT ! -p udp --dport 21 -j DROP\n" ++
-                                            "-A OUTPUT -p TCP ! -d 200.0.0.1/8 -j DROP\n -A OUTPUT ! --dport 21 -j LOG"
+                "-A OUTPUT -p 17 --sport 0:65535 --dport 21:21 -j LOG\n"
+            Right input = parseIPtables $   "-A INPUT -s 192.168.1.2/32 -d 0.0.0.0/0 -j ACCEPT\n -A INPUT ! -p udp --dport 21 -j DROP\n" ++
+                                            "-A OUTPUT -p TCP ! -d 200.0.0.1/8 -j DROP\n -A OUTPUT -p udp --dport 21 -j LOG"

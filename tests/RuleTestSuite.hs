@@ -68,6 +68,10 @@ tests =
             testCase "removeShadowing" test_removeShadowing2,
             testCase "removeShadowing" test_removeShadowing3,
             testCase "brutal" test_removeShadowedRulesBrutal
+        ],
+        testGroup "rawInterval2Protocol"
+        [
+            testCase "rawInterval2Protocol UDP" test_rawInterval2Protocol
         ]
     ]
     ]

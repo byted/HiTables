@@ -12,9 +12,9 @@ suitableUDPRule = (RawRule (RawBox (False, univS) (False, univD) (False, univSP)
 notSuitableTCP =  (RawRule (RawBox (False, univS) (False, univD) (False, univSP) (False, univDP) (True, (17,17))) (Chain "DROP"))
 
 test_getRelevantBlocksEmpty = [] @=? getRelevantBlocks ("INPUT", [])
-test_getRelevantBlocksCompleteRelevant = [((0, 99), rules)] @=? getRelevantBlocks ("INPUT", rules)
+test_getRelevantBlocksCompleteRelevant = [(0, (0,99), rules)] @=? getRelevantBlocks ("INPUT", rules)
     where   rules = take 100 $ repeat suitableUDPRule
-test_getRelevantBlocks = [((0,10), init $ init rules)] @=? getRelevantBlocks ("INPUT", rules)
+test_getRelevantBlocks = [(0,(0,10), init $ init rules)] @=? getRelevantBlocks ("INPUT", rules)
     where   rules = (take 11 $ repeat suitableUDPRule) ++
                 [   (RawRule (RawBox (False, univS) (False, univD) (False, univSP) (False, univDP) (True, (6,6))) (Chain "DROP"))
                 ,   suitableUDPRule ]

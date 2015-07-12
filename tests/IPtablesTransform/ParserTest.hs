@@ -26,9 +26,9 @@ test_parseRawRuleFromWordsComplete = Right ("INPUT", rule) @=? parseRawRuleFromW
                                                                         ,"INPUT"
                                                                         ,"-s", "192.168.0.2"
                                                                         ,"-d", "192.168.2.0"
+                                                                        ,"-p", "udp"
                                                                         ,"--sport", "21"
                                                                         ,"--dport", "22"
-                                                                        ,"-p", "udp"
                                                                         ,"-j", "ACCEPT" ]
     where   rule = RawRule (RawBox (False,s) (False,d) (False,(21, 21)) (False,(22, 22)) (False,(17, 17))) (Chain "ACCEPT")
             Right s = subnetParser "192.168.0.2"

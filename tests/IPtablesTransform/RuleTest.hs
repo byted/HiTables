@@ -2,7 +2,7 @@ module IPtablesTransform.RuleTest where
 
 import Test.HUnit
 import IPtablesTransform.Datatypes
-import IPtablesTransform.Parser (subnetToInterval)
+import IPtablesTransform.Parser (subnetToInterval, subnetParser)
 import IPtablesTransform.Utils
 import IPtablesTransform.Rule
 
@@ -94,3 +94,9 @@ test_removeShadowing3 = removeShadowing r2 [r2, r3] [] @?= []
     where   r1 = Rule (Box (0, 0) (5, 5) univSP (0, 0) (16, 16)) $ Chain "ACCEPT"
             r2 = Rule (Box (10, 20) (100, 200) univSP (0, 5000) (7, 7)) $ Chain "ACCEPT"
             r3 = Rule (Box (10, 19) (100, 100) (0, 0) (0, 0) (7, 7)) $ Chain "DROP"
+
+
+test_rawInterval2Protocol = "17" @=? rawInterval2Protocol (raw_prot b)
+    where   b = RawBox (False,s) (False,d) (False,(21, 21)) (False,(22, 22)) (False,(17, 17))
+            Right s = subnetParser "192.168.0.2"
+            Right d = subnetParser "192.168.2.0"

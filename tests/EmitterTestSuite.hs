@@ -22,8 +22,10 @@ tests =
         [
             testCase "rule2String" test_rule2String,
             testCase "rawRule2String" test_rawRule2String,
+            testCase "rawRule2StringAgain" test_rawRule2StringAgain,
             testCase "box2String" test_box2String,
             testCase "box2String with wildcard ip src" test_box2StringPartlyRemoveIPWildcard,
+            testCase "rawBox2StringSimple simple UDP rule" test_rawBox2StringSimple,
             testCase "rawBox2String" test_rawBox2String,
             testCase "rawBox2String only prot negated" test_rawBox2StringProtNeg,
             testCase "rawBox2String only ip src and it is negated" test_rawBox2StringIPsrcNeg

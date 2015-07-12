@@ -3,6 +3,7 @@ module IPtablesTransform.EmitterTest where
 import Test.HUnit
 
 import IPtablesTransform.Datatypes
+import IPtablesTransform.Parser (subnetParser)
 import IPtablesTransform.Emitter
 import IPtablesTransform.Rule
 import IPtablesTransform.Tree
@@ -68,11 +69,11 @@ treeRightWeighted r1 r2 r3 r4 = appendChildren defaultNode [appendRules defaultN
 
 
 
-test_tree2ListLeaf = out @=? tree2List "C" Linear (appendRules defaultNode . take 5 $ repeat defaultRule)
+test_tree2ListLeaf = out @=? tree2List "C" "" Linear (appendRules defaultNode . take 5 $ repeat defaultRule)
     where   out = ["", ""] ++ (take 5 . repeat $ rule2String "C" defaultRule)
 
 
-test_tree2List = out @=? tree2List "C" Linear (treeRightWeighted r1x r2x r3x r4x)
+test_tree2List = out @=? tree2List "C" "" Linear (treeRightWeighted r1x r2x r3x r4x)
     where   r1x = [r1,r2,r3]   
             r2x = [r2,r4]
             r3x = [r3,r1,r2]
@@ -206,16 +207,24 @@ test_rule2String = out @=? rule2String "myChain" defaultRule
     where   out = "-A myChain " ++ (box2String defaultBox) ++ " -j DROP\n"
 test_rawRule2String = out @=? rawRule2String "myChain" fullNegRawRule
     where   out = "-A myChain " ++ (rawBox2String fullNegRawBox) ++ " -j DROP\n"     
+test_rawRule2StringAgain = out @=? rawRule2String "myChain" rule
+    where   rule = RawRule (RawBox (False,s) (False,d) (False,(21, 21)) (False,(22, 22)) (False,(17, 17))) (Chain "ACCEPT")
+            Right s = subnetParser "192.168.0.2"
+            Right d = subnetParser "192.168.2.0"
+            out = "-A myChain -m iprange --src-range 192.168.0.2-192.168.0.2 --dst-range 192.168.2.0-192.168.2.0 -p 17 --sport 21:21 --dport 22:22 -j ACCEPT\n"
 
-
-test_box2String = "-p 0 --sport 0:65535 --dport 0:65535" @=? box2String defaultBox
+test_box2String = "-p 0" @=? box2String defaultBox
 test_box2StringPartlyRemoveIPWildcard = 
-    "-m iprange --dst-range 0.0.0.0-0.0.0.0 -p 0 --sport 0:0 --dport 0:0" @=? box2String (Box univS (0,0) (0,0) (0,0) (0,0))
+    "-m iprange --dst-range 0.0.0.0-0.0.0.0 -p 0" @=? box2String (Box univS (0,0) (0,0) (0,0) (0,0))
 
-
+test_rawBox2StringSimple = out @=? rawBox2String rawBox
+    where   rawBox = RawBox (False,s) (False,d) (False,(21, 21)) (False,(22, 22)) (False,(17, 17))
+            Right s = subnetParser "192.168.0.2"
+            Right d = subnetParser "192.168.2.0"
+            out = "-m iprange --src-range 192.168.0.2-192.168.0.2 --dst-range 192.168.2.0-192.168.2.0 -p 17 --sport 21:21 --dport 22:22"
 test_rawBox2String = out @=? rawBox2String fullNegRawBox
-    where   out = "-m iprange ! --src-range 0.0.0.21-0.0.0.21 ! --dst-range 0.0.0.21-0.0.0.21 ! -p 21 ! --sport 21:21 ! --dport 21:21"
+    where   out = "-m iprange ! --src-range 0.0.0.21-0.0.0.21 ! --dst-range 0.0.0.21-0.0.0.21 ! -p 17 ! --sport 21:21 ! --dport 21:21"
 test_rawBox2StringProtNeg = out @=? rawBox2String (RawBox (False, univS) (False, univD) (False, (1,1)) (False, (1,1)) (True, (21,21)))
-    where   out = "! -p 21 --sport 1:1 --dport 1:1"
+    where   out = "! -p 21"
 test_rawBox2StringIPsrcNeg = out @=? rawBox2String (RawBox (True, (45,77)) (False, univD) (False, (1,1)) (False, (1,1)) (True, (21,21)))
-    where   out = "-m iprange ! --src-range 0.0.0.45-0.0.0.77 ! -p 21 --sport 1:1 --dport 1:1"
+    where   out = "-m iprange ! --src-range 0.0.0.45-0.0.0.77 ! -p 21"

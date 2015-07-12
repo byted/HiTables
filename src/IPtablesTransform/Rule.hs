@@ -28,7 +28,7 @@ fullNegRawBox = RawBox  (True, (21, 21))
                         (True, (21, 21))
                         (True, (21, 21))
                         (True, (21, 21))
-                        (True, (21, 21))
+                        (True, (17, 17))
 
 defaultRawRule = RawRule defaultRawBox (Chain "DROP")
 fullNegRawRule = RawRule fullNegRawBox (Chain "DROP")
@@ -81,7 +81,7 @@ interval2Protocol :: Interval -> String
 interval2Protocol (a, _) = show a
 
 rawInterval2Protocol :: RawInterval -> String
-rawInterval2Protocol (a, _) = show a
+rawInterval2Protocol (_, interv) = interval2Protocol interv
 
 interval2IPrange :: Interval -> String
 interval2IPrange (a, b) = word32ToIP a ++ "-" ++ word32ToIP b
