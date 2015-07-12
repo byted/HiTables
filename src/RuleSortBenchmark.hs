@@ -1,3 +1,4 @@
+{- Author: Stefan Selent -}
 import System.Environment
 import Data.Word
 import Data.HashSet as H

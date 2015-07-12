@@ -1,3 +1,4 @@
+{- Author: Stefan Selent -}
 {-# LANGUAGE DeriveDataTypeable #-}
 
 module IPtablesTransform.Datatypes

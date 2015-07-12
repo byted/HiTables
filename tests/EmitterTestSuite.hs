@@ -1,3 +1,4 @@
+{- Author: Stefan Selent -}
 module Main (
     main
  ) where

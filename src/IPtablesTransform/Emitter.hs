@@ -1,3 +1,4 @@
+{- Author: Stefan Selent -}
 module IPtablesTransform.Emitter
 where
 
