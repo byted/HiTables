@@ -1,0 +1,68 @@
+Name:               iptablesTransform
+Version:            0.0 
+Description:         
+License:            GPL
+Author:             Stefan Selent 
+Maintainer:           
+Build-Type:         Simple 
+Cabal-Version:      >=1.2  
+
+Library
+  Hs-source-dirs:       src, tests
+  Build-depends:        base,
+                        HUnit,
+                        QuickCheck,
+                        test-framework,
+                        test-framework-hunit,
+                        test-framework-quickcheck2,
+                        split,
+                        cmdargs,
+                        directory,
+                        syb,
+                        unordered-containers
+
+
+Executable iptablesTransform
+  Main-is:          iptablesTransform.hs
+  Build-Depends:    base >= 3 && < 5
+  Hs-source-dirs:   src, tests 
+                    
+
+test-suite parser
+  type:             exitcode-stdio-1.0
+  main-is:          ParserTestSuite.hs
+  Hs-source-dirs:   src, tests
+
+
+test-suite rule
+  type:             exitcode-stdio-1.0
+  main-is:          RuleTestSuite.hs
+  Hs-source-dirs:   src, tests
+
+
+test-suite utils
+  type:             exitcode-stdio-1.0
+  main-is:          UtilsTestSuite.hs
+  Hs-source-dirs:   src, tests
+
+
+test-suite tree
+  type:             exitcode-stdio-1.0
+  main-is:          TreeTestSuite.hs
+  Hs-source-dirs:   src, tests
+
+
+test-suite transEngine
+  type:             exitcode-stdio-1.0
+  main-is:          TransformationEngineTestSuite.hs
+  Hs-source-dirs:   src, tests
+
+test-suite selector
+  type:             exitcode-stdio-1.0
+  main-is:          SelectorTestSuite.hs
+  Hs-source-dirs:   src, tests
+
+test-suite emitter
+  type:             exitcode-stdio-1.0
+  main-is:          EmitterTestSuite.hs
+  Hs-source-dirs:   src, tests
